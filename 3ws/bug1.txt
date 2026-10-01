@@ -1,0 +1,674 @@
+jadi ada bug idle di row end yang seharusnya berubah jadi timestamp, coba liat
+
+262006525-100    ILAPAK 3/4    LKNTA    JJ153 1D    2026-10-01 11:30:54    Idle    08    0017
+ aslinya idle itu udah end udah completed dari trigger button Incomplete MB  dan master box terakhir tapi ini entah akrena sesi software gak kerekam atau ada bug apa malah statusnya idle abadi,
+sebelumnya aku pasang logic gate trigger kedua agar supaya trigger kedua ngambil logic
+''jika status idle lebih dari 20 menit dan sistem mendeteksi ada perubahan work order, formula, dan lain lain, maka status idle akan berubah menjadi timestamp dihitung dari pallet terakhir yang dihitung"
+masalahnya pake gate trigger kedua diatas itu proses nya lama dan ada kemungkinan misal ngebug idle dihari jumat eh malah hari senin baru berubah end timestamp karena dihari senen baru jalan batch baru, kan lama bgt, makanya gw udah screen record nih kalau setelah di klik button incomplete mb itu apa yang akan terjadi, dan ini alurnya
+
+open screen pertama setelah klik button incomplete mb
+
+IMAGE 386x142 (Screenshot 2026-10-01 182814.png)
+
+[TEXT #1]
+"Confirm"
+bbox=(0,10)-(42,22)
+position=top-left
+order=1
+
+[TEXT #2]
+"Master box is incomplete , PLEASE CONFIRM THIS IS THE LAST MASTER BOX ."
+bbox=(54,52)-(356,78)
+position=center
+order=2
+
+[TEXT #3]
+"Yes"
+bbox=(248,118)-(268,128)
+position=bottom-right
+order=3
+
+[TEXT #4]
+"No"
+bbox=(328,118)-(346,130)
+position=bottom-right
+order=4
+
+open screen kedua setelah klik button incomplete mb
+IMAGE 519x530 (Screenshot 2026-10-01 182849.png)
+
+[TEXT #1]
+"Electronic Signature"
+bbox=(16,8)-(122,22)
+position=top-left
+order=1
+
+[TEXT #2]
+"( CW - 00071"
+bbox=(5,96)-(64,116)
+position=top-left
+order=2
+relations={"below":["elem_3"]}
+
+[TEXT #3]
+"Sign here to continue ."
+bbox=(6,128)-(120,144)
+position=top-left
+order=3
+relations={"above":["elem_2"]}
+
+[TEXT #4]
+"User Id"
+bbox=(28,253)-(82,267)
+position=middle-left
+order=4
+
+[TEXT #5]
+"Nama user"
+bbox=(246,254)-(317,266)
+position=center
+order=5
+
+[TEXT #6]
+"Password"
+bbox=(14,296)-(82,310)
+position=middle-left
+order=6
+
+[TEXT #7]
+"Cancel"
+bbox=(285,430)-(321,442)
+position=bottom-center
+order=7
+
+[TEXT #8]
+"Company Statement This is a property of Bintang7 ."
+bbox=(6,456)-(180,488)
+position=bottom-left
+order=8
+
+open screen ketiga setelah klik button incomplete mb
+
+IMAGE 448x282 (Screenshot 2026-10-01 182909.png)
+
+[TEXT #1]
+"a Masukkan Jumlah uom primary"
+bbox=(10,6)-(192,21)
+position=top-left
+order=1
+
+[TEXT #2]
+"ENTER QUANTITY OF BOX"
+bbox=(62,56)-(302,74)
+position=top-center
+order=2
+
+[TEXT #3]
+"Tidak"
+bbox=(88,198)-(118,212)
+position=bottom-left
+order=3
+
+[TEXT #4]
+"Ya"
+bbox=(312,198)-(330,214)
+position=bottom-right
+order=4
+
+open screen keempat setelah klik button incomplete mb
+
+IMAGE 976x675 (Screenshot 2026-10-01 182939.png)
+
+[TEXT #1]
+"Check Weighing - Select Work Order"
+bbox=(0,8)-(189,26)
+position=top-left
+order=1
+relations={"below":["elem_2"]}
+
+[TEXT #2]
+"Penimbang DKU072"
+bbox=(18,54)-(146,68)
+position=top-left
+order=2
+relations={"above":["elem_1"],"below":["elem_3"]}
+
+[TEXT #3]
+"Pengepak VKH141"
+bbox=(20,84)-(144,98)
+position=top-left
+order=3
+relations={"above":["elem_2"],"below":["elem_4","elem_12"]}
+
+[TEXT #4]
+"1"
+bbox=(66,114)-(76,126)
+position=top-left
+order=4
+relations={"above":["elem_3"],"right_of":["elem_12"],"below":["elem_5"]}
+
+[TEXT #5]
+"of 103 • •"
+bbox=(116,114)-(198,126)
+position=top-left
+order=5
+relations={"above":["elem_3"],"left_of":["elem_4"],"below":["elem_13","elem_16"]}
+
+[TEXT #6]
+"WORK ORDER"
+bbox=(2,142)-(78,154)
+position=top-left
+order=6
+relations={"above":["elem_4"],"right_of":["elem_13","elem_18"],"below":["elem_6"]}
+
+[TEXT #7]
+"Material"
+bbox=(96,144)-(136,154)
+position=top-left
+order=7
+relations={"above":["elem_12"],"left_of":["elem_5"],"right_of":["elem_18"],"below":["elem_14","elem_16"]}
+
+[TEXT #8]
+"DESCRIPTION"
+bbox=(212,142)-(286,154)
+position=top-left
+order=8
+relations={"left_of":["elem_5","elem_13"],"below":["elem_19"]}
+
+[TEXT #9]
+"172007670 - 100"
+bbox=(0,164)-(86,176)
+position=top-left
+order=9
+relations={"above":["elem_5"],"right_of":["elem_14","elem_19"],"below":["elem_7"]}
+
+[TEXT #10]
+"LKJTA"
+bbox=(94,164)-(132,176)
+position=top-left
+order=10
+relations={"above":["elem_13"],"left_of":["elem_6"],"right_of":["elem_19"],"below":["elem_15","elem_16"]}
+
+[TEXT #11]
+"KOMIX RASA JAHE LIQ / 30SCH"
+bbox=(210,162)-(394,176)
+position=top-left
+order=11
+relations={"above":["elem_18"],"left_of":["elem_6","elem_14"],"below":["elem_20","elem_22"]}
+
+[TEXT #12]
+"172007755 - 100"
+bbox=(0,186)-(86,198)
+position=top-left
+order=12
+relations={"above":["elem_6"],"right_of":["elem_15","elem_20"],"below":["elem_8"]}
+
+[TEXT #13]
+"LKJTA"
+bbox=(94,186)-(132,198)
+position=top-left
+order=13
+relations={"above":["elem_14"],"left_of":["elem_7"],"right_of":["elem_20"],"below":["elem_16"]}
+
+[TEXT #14]
+"KOMIX RASA JAHE LIQ / 30SCH"
+bbox=(210,186)-(394,198)
+position=top-left
+order=14
+relations={"above":["elem_19"],"left_of":["elem_7","elem_15"],"below":["elem_21","elem_22"]}
+
+[TEXT #15]
+"172007940 - 100"
+bbox=(0,206)-(86,218)
+position=top-left
+order=15
+relations={"above":["elem_7"],"right_of":["elem_16","elem_21"],"below":["elem_9","elem_10"]}
+
+[TEXT #16]
+"LKJTA LKJTA LBMAM LKJTA"
+bbox=(90,206)-(142,282)
+position=middle-left
+order=16
+relations={"above":["elem_12","elem_13","elem_14","elem_15"],"left_of":["elem_8","elem_9","elem_10"],"right_of":["elem_21","elem_22"],"below":["elem_17","elem_24"]}
+
+[TEXT #17]
+"KOMIX RASA JAHE LIQ / 30SCH"
+bbox=(210,206)-(394,218)
+position=top-left
+order=17
+relations={"above":["elem_20"],"left_of":["elem_8","elem_16"],"below":["elem_22"]}
+
+[TEXT #18]
+"172007941 - 100"
+bbox=(0,228)-(86,240)
+position=middle-left
+order=18
+relations={"above":["elem_8"],"right_of":["elem_16","elem_22"],"below":["elem_10"]}
+
+[TEXT #19]
+"KOMIX RASA JAHE LIQ / 30SCH BEJO LIQ / 180SCH KOMIX RASA JAHE LIQ / 30SCH"
+bbox=(206,228)-(394,282)
+position=middle-left
+order=19
+relations={"above":["elem_19","elem_20","elem_21"],"left_of":["elem_16","elem_9","elem_10"],"below":["elem_23"]}
+
+[TEXT #20]
+"182003958 - 100 192005581 - 100"
+bbox=(0,248)-(86,282)
+position=middle-left
+order=20
+relations={"above":["elem_8","elem_9"],"right_of":["elem_16","elem_22"],"below":["elem_11"]}
+
+[TEXT #21]
+"192005629 - 100 202005012 - 100"
+bbox=(0,292)-(86,328)
+position=middle-left
+order=21
+relations={"above":["elem_10"],"right_of":["elem_17","elem_23"],"below":["elem_24"]}
+
+[TEXT #22]
+"LKNTA LBMAQ"
+bbox=(92,291)-(140,327)
+position=middle-left
+order=22
+relations={"above":["elem_16"],"left_of":["elem_11"],"right_of":["elem_23"],"below":["elem_24"]}
+
+[TEXT #23]
+"KOMIX RASA JERUK NIPIS LIQ / 30SCH BEJO HERBAL LIQ / 12SCH"
+bbox=(206,290)-(438,328)
+position=middle-left
+order=23
+relations={"above":["elem_22"],"left_of":["elem_11","elem_17"]}
+
+[TEXT #24]
+"Ketik Nomor Schedule"
+bbox=(4,367)-(204,385)
+position=middle-left
+order=24
+relations={"above":["elem_16","elem_11","elem_17"]}
+
+[TEXT #25]
+"Sebelumnya"
+bbox=(16,445)-(76,458)
+position=bottom-left
+order=25
+
+[TEXT #26]
+"Refresh"
+bbox=(384,445)-(422,457)
+position=bottom-center
+order=26
+
+[TEXT #27]
+"NEXT"
+bbox=(492,445)-(521,457)
+position=bottom-center
+order=27
+
+nah gw mau lu keep logic gate trigger 20 menit di atas menjadi gate ke 3 untuk trigger end packaging, dan kita buat gate kedua dari hasil analisa alur setelah button incomplete mb di klik, nah gw mau lu kek pasang gate kedua dengan syarat switch if sebanyak banyak nya jadi maksudku gini
+gate 2 trigger A = [TEXT #1]
+"Confirm"
+bbox=(0,10)-(42,22)
+position=top-left
+order=1
+
+[TEXT #2]
+"Master box is incomplete , PLEASE CONFIRM THIS IS THE LAST MASTER BOX ."
+bbox=(54,52)-(356,78)
+position=center
+order=2
+
+[TEXT #3]
+"Yes"
+bbox=(248,118)-(268,128)
+position=bottom-right
+order=3
+
+[TEXT #4]
+"No"
+bbox=(328,118)-(346,130)
+position=bottom-right
+order=4
+
+gate 2 trigger B = [TEXT #1]
+"Electronic Signature"
+bbox=(16,8)-(122,22)
+position=top-left
+order=1
+
+[TEXT #2]
+"( CW - 00071"
+bbox=(5,96)-(64,116)
+position=top-left
+order=2
+relations={"below":["elem_3"]}
+
+gate 2 trigger C = [TEXT #3]
+"Sign here to continue ."
+bbox=(6,128)-(120,144)
+position=top-left
+order=3
+relations={"above":["elem_2"]}
+
+sampai gate 2 trigger kesekian sampe open screen ke 4 = [TEXT #1]
+"Check Weighing - Select Work Order"
+bbox=(0,8)-(189,26)
+position=top-left
+order=1
+relations={"below":["elem_2"]}
+
+[TEXT #2]
+"Penimbang DKU072"
+bbox=(18,54)-(146,68)
+position=top-left
+order=2
+relations={"above":["elem_1"],"below":["elem_3"]}
+
+[TEXT #3]
+"Pengepak VKH141"
+bbox=(20,84)-(144,98)
+position=top-left
+order=3
+relations={"above":["elem_2"],"below":["elem_4","elem_12"]}
+
+paham gak sih, jadi syarat gate kedua tuh bener bener enggak ketat/strict bgt tapi bener bener kaya kalau salah satu string atau kondisi diatas muncul entah tulisan confirm, a Masukkan Jumlah uom primary, work order, atau apalah, itu sebagai mekansime backup trigger end pakcaging jika gate pertama yaitu button incomplete mb/master box terakhir itu malah nge bug idle, nah gate kedua ini bener bener free sebebas bebasnya jika salah satu kondisi tulisan yang muncul setelah button incomplete mb/master box terakhir di klik yaitu
+""open screen pertama setelah klik button incomplete mb
+
+IMAGE 386x142 (Screenshot 2026-10-01 182814.png)
+
+[TEXT #1]
+"Confirm"
+bbox=(0,10)-(42,22)
+position=top-left
+order=1
+
+[TEXT #2]
+"Master box is incomplete , PLEASE CONFIRM THIS IS THE LAST MASTER BOX ."
+bbox=(54,52)-(356,78)
+position=center
+order=2
+
+[TEXT #3]
+"Yes"
+bbox=(248,118)-(268,128)
+position=bottom-right
+order=3
+
+[TEXT #4]
+"No"
+bbox=(328,118)-(346,130)
+position=bottom-right
+order=4
+
+open screen kedua setelah klik button incomplete mb
+IMAGE 519x530 (Screenshot 2026-10-01 182849.png)
+
+[TEXT #1]
+"Electronic Signature"
+bbox=(16,8)-(122,22)
+position=top-left
+order=1
+
+[TEXT #2]
+"( CW - 00071"
+bbox=(5,96)-(64,116)
+position=top-left
+order=2
+relations={"below":["elem_3"]}
+
+[TEXT #3]
+"Sign here to continue ."
+bbox=(6,128)-(120,144)
+position=top-left
+order=3
+relations={"above":["elem_2"]}
+
+[TEXT #4]
+"User Id"
+bbox=(28,253)-(82,267)
+position=middle-left
+order=4
+
+[TEXT #5]
+"Nama user"
+bbox=(246,254)-(317,266)
+position=center
+order=5
+
+[TEXT #6]
+"Password"
+bbox=(14,296)-(82,310)
+position=middle-left
+order=6
+
+[TEXT #7]
+"Cancel"
+bbox=(285,430)-(321,442)
+position=bottom-center
+order=7
+
+[TEXT #8]
+"Company Statement This is a property of Bintang7 ."
+bbox=(6,456)-(180,488)
+position=bottom-left
+order=8
+
+open screen ketiga setelah klik button incomplete mb
+
+IMAGE 448x282 (Screenshot 2026-10-01 182909.png)
+
+[TEXT #1]
+"a Masukkan Jumlah uom primary"
+bbox=(10,6)-(192,21)
+position=top-left
+order=1
+
+[TEXT #2]
+"ENTER QUANTITY OF BOX"
+bbox=(62,56)-(302,74)
+position=top-center
+order=2
+
+[TEXT #3]
+"Tidak"
+bbox=(88,198)-(118,212)
+position=bottom-left
+order=3
+
+[TEXT #4]
+"Ya"
+bbox=(312,198)-(330,214)
+position=bottom-right
+order=4
+
+open screen keempat setelah klik button incomplete mb
+
+IMAGE 976x675 (Screenshot 2026-10-01 182939.png)
+
+[TEXT #1]
+"Check Weighing - Select Work Order"
+bbox=(0,8)-(189,26)
+position=top-left
+order=1
+relations={"below":["elem_2"]}
+
+[TEXT #2]
+"Penimbang DKU072"
+bbox=(18,54)-(146,68)
+position=top-left
+order=2
+relations={"above":["elem_1"],"below":["elem_3"]}
+
+[TEXT #3]
+"Pengepak VKH141"
+bbox=(20,84)-(144,98)
+position=top-left
+order=3
+relations={"above":["elem_2"],"below":["elem_4","elem_12"]}
+
+[TEXT #4]
+"1"
+bbox=(66,114)-(76,126)
+position=top-left
+order=4
+relations={"above":["elem_3"],"right_of":["elem_12"],"below":["elem_5"]}
+
+[TEXT #5]
+"of 103 • •"
+bbox=(116,114)-(198,126)
+position=top-left
+order=5
+relations={"above":["elem_3"],"left_of":["elem_4"],"below":["elem_13","elem_16"]}
+
+[TEXT #6]
+"WORK ORDER"
+bbox=(2,142)-(78,154)
+position=top-left
+order=6
+relations={"above":["elem_4"],"right_of":["elem_13","elem_18"],"below":["elem_6"]}
+
+[TEXT #7]
+"Material"
+bbox=(96,144)-(136,154)
+position=top-left
+order=7
+relations={"above":["elem_12"],"left_of":["elem_5"],"right_of":["elem_18"],"below":["elem_14","elem_16"]}
+
+[TEXT #8]
+"DESCRIPTION"
+bbox=(212,142)-(286,154)
+position=top-left
+order=8
+relations={"left_of":["elem_5","elem_13"],"below":["elem_19"]}
+
+[TEXT #9]
+"172007670 - 100"
+bbox=(0,164)-(86,176)
+position=top-left
+order=9
+relations={"above":["elem_5"],"right_of":["elem_14","elem_19"],"below":["elem_7"]}
+
+[TEXT #10]
+"LKJTA"
+bbox=(94,164)-(132,176)
+position=top-left
+order=10
+relations={"above":["elem_13"],"left_of":["elem_6"],"right_of":["elem_19"],"below":["elem_15","elem_16"]}
+
+[TEXT #11]
+"KOMIX RASA JAHE LIQ / 30SCH"
+bbox=(210,162)-(394,176)
+position=top-left
+order=11
+relations={"above":["elem_18"],"left_of":["elem_6","elem_14"],"below":["elem_20","elem_22"]}
+
+[TEXT #12]
+"172007755 - 100"
+bbox=(0,186)-(86,198)
+position=top-left
+order=12
+relations={"above":["elem_6"],"right_of":["elem_15","elem_20"],"below":["elem_8"]}
+
+[TEXT #13]
+"LKJTA"
+bbox=(94,186)-(132,198)
+position=top-left
+order=13
+relations={"above":["elem_14"],"left_of":["elem_7"],"right_of":["elem_20"],"below":["elem_16"]}
+
+[TEXT #14]
+"KOMIX RASA JAHE LIQ / 30SCH"
+bbox=(210,186)-(394,198)
+position=top-left
+order=14
+relations={"above":["elem_19"],"left_of":["elem_7","elem_15"],"below":["elem_21","elem_22"]}
+
+[TEXT #15]
+"172007940 - 100"
+bbox=(0,206)-(86,218)
+position=top-left
+order=15
+relations={"above":["elem_7"],"right_of":["elem_16","elem_21"],"below":["elem_9","elem_10"]}
+
+[TEXT #16]
+"LKJTA LKJTA LBMAM LKJTA"
+bbox=(90,206)-(142,282)
+position=middle-left
+order=16
+relations={"above":["elem_12","elem_13","elem_14","elem_15"],"left_of":["elem_8","elem_9","elem_10"],"right_of":["elem_21","elem_22"],"below":["elem_17","elem_24"]}
+
+[TEXT #17]
+"KOMIX RASA JAHE LIQ / 30SCH"
+bbox=(210,206)-(394,218)
+position=top-left
+order=17
+relations={"above":["elem_20"],"left_of":["elem_8","elem_16"],"below":["elem_22"]}
+
+[TEXT #18]
+"172007941 - 100"
+bbox=(0,228)-(86,240)
+position=middle-left
+order=18
+relations={"above":["elem_8"],"right_of":["elem_16","elem_22"],"below":["elem_10"]}
+
+[TEXT #19]
+"KOMIX RASA JAHE LIQ / 30SCH BEJO LIQ / 180SCH KOMIX RASA JAHE LIQ / 30SCH"
+bbox=(206,228)-(394,282)
+position=middle-left
+order=19
+relations={"above":["elem_19","elem_20","elem_21"],"left_of":["elem_16","elem_9","elem_10"],"below":["elem_23"]}
+
+[TEXT #20]
+"182003958 - 100 192005581 - 100"
+bbox=(0,248)-(86,282)
+position=middle-left
+order=20
+relations={"above":["elem_8","elem_9"],"right_of":["elem_16","elem_22"],"below":["elem_11"]}
+
+[TEXT #21]
+"192005629 - 100 202005012 - 100"
+bbox=(0,292)-(86,328)
+position=middle-left
+order=21
+relations={"above":["elem_10"],"right_of":["elem_17","elem_23"],"below":["elem_24"]}
+
+[TEXT #22]
+"LKNTA LBMAQ"
+bbox=(92,291)-(140,327)
+position=middle-left
+order=22
+relations={"above":["elem_16"],"left_of":["elem_11"],"right_of":["elem_23"],"below":["elem_24"]}
+
+[TEXT #23]
+"KOMIX RASA JERUK NIPIS LIQ / 30SCH BEJO HERBAL LIQ / 12SCH"
+bbox=(206,290)-(438,328)
+position=middle-left
+order=23
+relations={"above":["elem_22"],"left_of":["elem_11","elem_17"]}
+
+[TEXT #24]
+"Ketik Nomor Schedule"
+bbox=(4,367)-(204,385)
+position=middle-left
+order=24
+relations={"above":["elem_16","elem_11","elem_17"]}
+
+[TEXT #25]
+"Sebelumnya"
+bbox=(16,445)-(76,458)
+position=bottom-left
+order=25
+
+[TEXT #26]
+"Refresh"
+bbox=(384,445)-(422,457)
+position=bottom-center
+order=26
+
+[TEXT #27]
+"NEXT"
+bbox=(492,445)-(521,457)
+position=bottom-center
+order=27
+
+"" maka akan dianggap sebagai end packaging dan status running/idle berubah menjadi timestamp end packaging tanpa lagi mengalami bug, paham? lakukan perbaikan
