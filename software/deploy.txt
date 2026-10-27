@@ -1,0 +1,5 @@
+# 1. Pindah ke direktori file
+cd D:\b7_3ws\shared_files
+
+# 2. Build file menjadi file_sharing.exe
+go build -o file_sharing.exe file_sharing.go
