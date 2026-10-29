@@ -1,0 +1,620 @@
+Terapkan/update logic sistem berdasarkan aturan berikut.
+
+PENTING: Jangan menghapus, mengganti, atau merusak logic existing yang sudah berjalan, terutama logic utama seperti jam form, validasi form, alur pengisian, penyimpanan data, edit, status, supervisor, staff, API/backend, database, dan UI. Fokus perubahan hanya pada logic yang diperlukan untuk validasi shift, siklus mingguan per mesin, dan dua jenis Missed Entry.
+
+Sebelum mengubah kode, pahami terlebih dahulu logic existing dan pertahankan behavior yang tidak berkaitan langsung dengan requirement ini.
+
+---
+
+1. ATURAN DASAR PENGISIAN INSPEKSI
+
+Setiap mesin memiliki siklus inspeksi mingguannya sendiri.
+
+Dalam setiap periode 1 minggu, setiap mesin wajib memiliki 3 pengisian, yaitu:
+
+1 × Shift 1
+1 × Shift 2
+1 × Shift 3
+
+Jadi total normalnya:
+
+3 pengisian per mesin per minggu
+
+Catatan penting: ini bukan berarti user hanya mengisi form satu kali. Maksudnya, dalam satu minggu setiap mesin harus memiliki satu pengisian untuk masing-masing dari tiga shift.
+
+Status pengisian harus selalu dihitung berdasarkan kombinasi:
+
+MESIN + PERIODE MINGGU + SHIFT
+
+Jangan menggunakan status global.
+
+Contoh data:
+
+24/09/2026 22:05:26
+Shift 1
+Compounding Liquid 2
+Personel:
+OK
+Ruangan:
+OK
+Peralatan:
+OK
+Menunggu Supervisor
+Staff: System Administrator
+SPV: -
+Edit
+
+24/09/2026 22:04:48
+Shift 1
+Compounding Solid 2
+Personel:
+NOK
+(mbuh)
+Ruangan:
+OK
+Peralatan:
+OK
+Menunggu Supervisor
+Staff: System Administrator
+SPV: -
+Edit
+
+Data tersebut menunjukkan bahwa masing-masing mesin memiliki pengisian Shift 1 sendiri.
+
+---
+
+2. DEFINISI JAM SHIFT
+
+Gunakan aturan shift berikut di seluruh sistem:
+
+Shift 1 = 06:45 - 15:15
+Shift 2 = 15:15 - 22:30
+Shift 3 = 22:30 - 06:45
+
+Untuk menentukan batas waktu, gunakan interval:
+
+Shift 1 = >= 06:45 dan < 15:15
+Shift 2 = >= 15:15 dan < 22:30
+Shift 3 = >= 22:30 dan < 06:45 hari berikutnya
+
+Waktu awal shift untuk record inspeksi:
+
+Shift 1 → 06:45
+Shift 2 → 15:15
+Shift 3 → 22:30
+
+PENTING: Ketiga shift pada satu tanggal tetap menggunakan tanggal yang sama.
+
+Contoh tanggal 12/10/2026:
+
+12/10/2026 06:45 → Shift 1
+12/10/2026 15:15 → Shift 2
+12/10/2026 22:30 → Shift 3
+
+Shift 3 yang dimulai pada "12/10/2026 22:30" tetap dianggap Shift 3 tanggal 12/10/2026, bukan tanggal 13/10/2026.
+
+Logic shift ini berlaku untuk semua mesin.
+
+---
+
+3. VALIDASI SHIFT YANG SUDAH DIISI
+
+Saat user membuka:
+
+Form Inspeksi
+    ↓
+Pilih Mesin
+    ↓
+Pilih Shift
+
+sistem harus mengecek status shift berdasarkan mesin yang dipilih dan periode minggu yang sedang diperiksa.
+
+Contoh:
+
+Mesin A
+Shift 1 = sudah diisi
+Shift 2 = belum diisi
+Shift 3 = belum diisi
+
+Maka pilihan normal yang tersedia:
+
+Shift 2
+Shift 3
+
+Shift 1 tidak boleh dipilih lagi karena sudah memiliki record untuk mesin tersebut pada periode minggu yang sama.
+
+PENTING
+
+Validasi harus benar-benar independen per mesin.
+
+Contoh:
+
+Mesin A → Shift 1 sudah diisi
+Mesin B → Shift 1 belum diisi
+Mesin C → Shift 1 belum diisi
+
+Maka:
+
+Mesin A → Shift 1 tidak tersedia
+Mesin B → Shift 1 masih tersedia
+Mesin C → Shift 1 masih tersedia
+
+Pengisian Mesin A tidak boleh mengubah status Mesin B atau Mesin C.
+
+---
+
+4. SIKLUS MINGGUAN HARUS DIHITUNG PER MESIN
+
+Setiap mesin mempunyai status mingguannya sendiri.
+
+Contoh terdapat 20 mesin:
+
+Mesin A → Shift 1 sudah diisi
+Mesin B → belum diisi
+Mesin C → belum diisi
+...
+Mesin T → belum diisi
+
+Maka hanya Mesin A yang dianggap sudah memiliki Shift 1.
+
+Mesin B-T tetap dapat melakukan pengisian Shift 1.
+
+Jangan pernah membuat satu mesin yang sudah selesai menyebabkan seluruh mesin dianggap selesai.
+
+---
+
+5. ADA DUA JENIS MISSED ENTRY
+
+Sistem harus memiliki dua jenis Missed Entry yang berbeda dan memiliki logic berbeda.
+
+Jangan menyamakan kedua kondisi tersebut.
+
+JENIS A — WEEKLY MISSED ENTRY
+
+Ini terjadi apabila satu periode minggu untuk suatu mesin tidak memiliki pengisian sama sekali.
+
+Contoh:
+
+12/10/2026 - 18/10/2026
+Mesin A
+Shift 1 → tidak ada
+Shift 2 → tidak ada
+Shift 3 → tidak ada
+
+Maka:
+
+Mesin A
+Weekly Missed Entry = 1
+
+Weekly Missed Entry tersebut mewakili seluruh kewajiban:
+
+Shift 1
+Shift 2
+Shift 3
+
+Penyelesaian Weekly Missed Entry
+
+User cukup melakukan 1 kali pengisian.
+
+User memilih satu tanggal bebas dalam periode minggu yang terlewat.
+
+Misalnya:
+
+Periode:
+12/10/2026 - 18/10/2026
+
+User memilih:
+15/10/2026
+
+Setelah submit satu kali, sistem otomatis membuat/mengisi:
+
+15/10/2026 06:45:00
+Shift 1
+
+15/10/2026 15:15:00
+Shift 2
+
+15/10/2026 22:30:00
+Shift 3
+
+Ketiga record tersebut dianggap sebagai penyelesaian 1 Weekly Missed Entry.
+
+User tidak perlu mengisi tiga form secara manual.
+
+---
+
+6. WEEKLY MISSED ENTRY KARENA LIBUR
+
+Hari libur penuh juga masuk ke Weekly Missed Entry, bukan dianggap sebagai kondisi yang menghilangkan kewajiban minggu tersebut.
+
+Jika satu minggu terlewat karena libur, user tetap harus menyelesaikan Weekly Missed Entry dengan 1 kali input.
+
+Misalnya:
+
+12/10/2026 - 18/10/2026
+Mesin: Compounding Liquid 1
+
+User memilih salah satu tanggal dalam periode tersebut.
+
+Sistem otomatis membuat tiga record pada tanggal yang dipilih:
+
+12/10/2026 06:45:00
+Shift 1
+Compounding Liquid 1
+Personel:
+- (Hari Libur)
+Ruangan:
+- (Hari Libur)
+Peralatan:
+- (Hari Libur)
+
+12/10/2026 15:15:00
+Shift 2
+Compounding Liquid 1
+Personel:
+- (Hari Libur)
+Ruangan:
+- (Hari Libur)
+Peralatan:
+- (Hari Libur)
+
+12/10/2026 22:30:00
+Shift 3
+Compounding Liquid 1
+Personel:
+- (Hari Libur)
+Ruangan:
+- (Hari Libur)
+Peralatan:
+- (Hari Libur)
+
+Pertahankan field lain seperti Staff, SPV, status, dan field existing lainnya sesuai logic existing.
+
+---
+
+7. JENIS B — MISSED SHIFT
+
+Jenis kedua berbeda dengan Weekly Missed Entry.
+
+Missed Shift terjadi ketika minggu tersebut sedang berjalan, tetapi user melewati salah satu shift.
+
+Contoh:
+
+Senin
+
+Shift 1 → belum diisi
+Shift 2 → sudah masuk waktunya
+
+Ketika user mencoba melakukan pengisian Shift 2, sistem harus mendeteksi:
+
+Shift 1 = MISSED
+
+Shift 1 langsung dianggap sebagai Missed Shift.
+
+User kemudian diarahkan ke flow Missed Entry untuk menyelesaikan Shift 1 yang terlewat.
+
+---
+
+8. HASIL MISSED SHIFT
+
+Missed Shift tidak sama dengan Weekly Missed Entry.
+
+Untuk contoh:
+
+Shift 1 → terlewat
+Shift 2 → user ingin mengisi normal
+
+Maka sistem harus menghasilkan dua record:
+
+Record 1:
+Shift 1
+Status/isi:
+- (Lupa)
+
+Record 2:
+Shift 2
+Isi inspeksi normal dari user
+
+Jadi setelah proses tersebut:
+
+Shift 1 → selesai sebagai Missed Shift dengan penanda "- (Lupa)"
+Shift 2 → selesai melalui pengisian normal
+Shift 3 → tetap belum diisi sampai waktunya
+
+Jangan membuat Missed Shift otomatis menjadi 3 shift.
+
+Auto-generate 3 shift hanya berlaku untuk Weekly Missed Entry.
+
+---
+
+9. KAPAN SHIFT MENJADI MISSED?
+
+Jika waktu suatu shift sudah terlewati dan shift tersebut belum memiliki record untuk mesin tersebut, maka shift tersebut dianggap Missed Shift.
+
+Contoh:
+
+Shift 1:
+06:45 - 15:15
+
+Tidak ada pengisian Shift 1.
+
+Waktu sudah masuk Shift 2:
+15:15
+
+Maka:
+
+Shift 1 = MISSED
+
+Jika user kemudian mencoba mengisi Shift 2, user harus diarahkan terlebih dahulu ke flow Missed Shift untuk Shift 1.
+
+Setelah Missed Shift Shift 1 diselesaikan, user tetap dapat melakukan pengisian normal Shift 2.
+
+---
+
+10. URUTAN WEEKLY MISSED ENTRY
+
+Jika terdapat beberapa minggu yang terlewat, sistem harus memprosesnya dari periode paling lama terlebih dahulu.
+
+Contoh:
+
+12/10/2026 - 18/10/2026 → belum diisi
+19/10/2026 - 25/10/2026 → belum diisi
+26/10/2026 → user baru masuk
+
+Maka sistem harus:
+
+Tahap 1
+
+Selesaikan:
+
+12/10/2026 - 18/10/2026
+
+User memilih satu tanggal dalam range tersebut dan submit satu kali.
+
+Sistem otomatis membuat 3 shift.
+
+Tahap 2
+
+Setelah periode pertama selesai, baru lanjut:
+
+19/10/2026 - 25/10/2026
+
+PENTING
+
+Jangan langsung melewati periode yang lebih lama hanya karena user baru melakukan pengisian pada tanggal yang lebih baru.
+
+Selalu proses:
+
+MISSED WEEK PALING LAMA
+        ↓
+selesaikan
+        ↓
+MISSED WEEK BERIKUTNYA
+        ↓
+selesaikan
+        ↓
+lanjut ke periode berikutnya
+
+---
+
+11. PEMILIHAN TANGGAL WEEKLY MISSED ENTRY
+
+Tanggal pada Weekly Missed Entry harus dapat dipilih oleh user.
+
+Jika periode missed adalah:
+
+12/10/2026 - 18/10/2026
+
+maka user hanya boleh memilih:
+
+12/10/2026
+13/10/2026
+14/10/2026
+15/10/2026
+16/10/2026
+17/10/2026
+18/10/2026
+
+User bebas memilih satu tanggal dari range tersebut.
+
+User tidak boleh memilih tanggal di luar periode Weekly Missed Entry.
+
+Setelah tanggal dipilih dan submit:
+
+1 input user
+    ↓
+3 record otomatis
+    ↓
+Shift 1 @ 06:45
+Shift 2 @ 15:15
+Shift 3 @ 22:30
+
+Ketiga record menggunakan tanggal yang sama dengan tanggal pilihan user.
+
+---
+
+12. CONTOH PERBEDAAN DUA MISSED ENTRY
+
+Kondisi A — Weekly Missed
+
+Minggu 12-18 Oktober
+
+Mesin A:
+Shift 1 → tidak ada
+Shift 2 → tidak ada
+Shift 3 → tidak ada
+
+Hasil:
+
+Weekly Missed Entry
+↓
+User pilih 1 tanggal
+↓
+1 kali submit
+↓
+Auto-generate 3 shift
+
+Kondisi B — Missed Shift
+
+Senin
+
+Shift 1 → tidak diisi
+Shift 2 → user ingin mengisi
+
+Hasil:
+
+Shift 1 → Missed Shift → "- (Lupa)"
+Shift 2 → pengisian normal user
+Shift 3 → belum diisi
+
+Kedua kondisi tersebut harus menggunakan logic yang berbeda.
+
+Implementasi UI boleh menggunakan halaman/komponen yang sama atau berbeda, sesuai struktur aplikasi yang paling aman, tetapi backend/business logic kedua kondisi tersebut harus tetap dibedakan.
+
+---
+
+13. INDEPENDEN PER MESIN
+
+Semua logic di atas harus dihitung secara independen untuk setiap mesin.
+
+Contoh:
+
+Mesin A
+Shift 1 ✓
+Shift 2 ✓
+Shift 3 ✓
+→ lengkap
+
+Mesin B
+Shift 1 ✗
+Shift 2 ✗
+Shift 3 ✗
+→ Weekly Missed Entry
+
+Mesin C
+Shift 1 ✓
+Shift 2 ✗ karena terlewat
+Shift 3 ✗
+→ memiliki Missed Shift sesuai kondisi aktual
+
+Status Mesin A tidak boleh memengaruhi Mesin B atau Mesin C.
+
+Jika Mesin A sudah lengkap, tetapi Mesin B tidak pernah melakukan pengisian, Mesin B tetap harus memiliki Weekly Missed Entry.
+
+---
+
+
+
+tambah logic ini,
+kadang ada case mesin hanya jalan shift 1 dan shift 2 dan operator ngisi normal di kedua shift itu di hari senin, kan operator gak ada yg ngecek shift 3 dalam artian selama seminggu tuh status shift 3 pending, nah 
+1. buat agar di minggu depan menjadi tanggungan user buat ngisi di (misal tadi tanggal 20 senin, berarti tanggal 27 adalah senin minggu depan) tanggal 27 user punya tanggungan buat ngisi shift 3 tadi (karena emang gak ada aktifitas yg dilakukan user di shift 3 maka user di tanggal 27 perlu ngisi tanggungan shift 3)
+2. kalau case misal di shift 1 dan shift 2 tanggal 20 user ngisi, nah selama rentang 21-26 buat agar user bisa ngisi yang terlewat shift 3 tadi di tanggal itu di shift apapun entah 1,2,3 tapi dengan status shift 3 sebagai shift terlewat, ini agar mengatasi shift 3 terlewat tidak menjadi tanggungan di minggu depan
+
+ingat, kedua poin di atas flexible ya maksudku misal hari rabu user baru ngisi karena emang senin-selasa libur ya maka di hari rabu shift 1 dihitung sebagai input pertama dan pengisian hanya di lakukan di 1 hari 1 tanggal di 3 shift berbeda, intinya logic ini udah ada di kode gw cuman nerangin aja takutnya lu ubah logic itu, gw cuman minta lu fokus di 2 perubahan di atas,
+kerjakan
+
+
+
+
+
+14. JANGAN MERUSAK LOGIC EXISTING
+
+Saat melakukan perubahan coding:
+
+JANGAN menghapus atau mengganti logic existing yang sudah berjalan.
+
+Pertahankan seluruh logic berikut kecuali memang diperlukan secara langsung untuk requirement ini:
+
+- logic jam form;
+- validasi waktu;
+- logic tanggal;
+- logic penyimpanan;
+- logic edit;
+- logic status;
+- logic supervisor;
+- logic staff;
+- logic mesin;
+- logic tampilan;
+- logic API/backend;
+- logic database;
+- logic existing untuk menentukan shift;
+- logic existing lainnya.
+
+Lakukan perubahan secara minimal, terisolasi, dan backward-compatible.
+
+Sebelum coding:
+
+1. Analisis struktur kode existing.
+2. Cari logic yang menentukan mesin.
+3. Cari logic yang menentukan periode minggu.
+4. Cari logic yang menentukan shift.
+5. Cari logic yang menentukan waktu pengisian.
+6. Cari logic yang menentukan shift sudah/belum diisi.
+7. Cari logic Missed Entry existing.
+8. Cari logic pembuatan record inspeksi.
+
+Kemudian tambahkan atau modifikasi logic yang diperlukan tanpa menghilangkan behavior existing yang tidak berkaitan dengan requirement ini.
+
+---
+
+15. RULE UTAMA YANG HARUS DIIKUTI
+
+Gunakan model berikut sebagai dasar implementasi:
+
+MESIN
+  ↓
+PERIODE MINGGU
+  ↓
+┌─────────────────────────────┐
+│ Shift 1                     │
+│ Shift 2                     │
+│ Shift 3                     │
+└─────────────────────────────┘
+
+Normal:
+
+Shift 1 ✓
+Shift 2 ✓
+Shift 3 ✗
+→ hanya Shift 3 yang tersedia
+
+Jika satu minggu penuh terlewat:
+
+Weekly Missed Entry
+    ↓
+Pilih 1 tanggal dalam minggu tersebut
+    ↓
+Submit 1 kali
+    ↓
+Auto-generate:
+    ├── Shift 1 @ 06:45
+    ├── Shift 2 @ 15:15
+    └── Shift 3 @ 22:30
+
+Jika hanya satu shift yang terlewat:
+
+Shift 1 ✗
+↓
+Waktu sudah masuk Shift 2
+↓
+Shift 1 menjadi Missed Shift
+↓
+User menyelesaikan Missed Shift
+↓
+Shift 1 = "- (Lupa)"
+↓
+User tetap mengisi Shift 2 secara normal
+
+Jika beberapa minggu terlewat:
+
+12-18 Okt → selesaikan terlebih dahulu
+      ↓
+19-25 Okt → selesaikan berikutnya
+      ↓
+periode berikutnya
+
+Dan seluruh status wajib dihitung berdasarkan:
+
+MESIN + PERIODE MINGGU + SHIFT
+
+Bukan berdasarkan status global seluruh mesin.
