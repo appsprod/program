@@ -1,0 +1,71 @@
+Perbaikan Logic B7 Inspeksi (beberapa logic dibawah sudah terapply, masalah update perbaikan logic adalah ai kurang paham konteks yg saya jelasin sebelumnya sehingga beberapa logic masih belum sesuai), perbaikan logic berupa (jika ada poin dibawah yg sudah sesuai di kode maka abaikan saja, saya hanya jelasin secara keseluruhan)
+
+1. Logic utama pengisian form inspeksi adalah 3 kali di 3 shift berbeda dalam 1 hari yang sama dalam rentang waktu 1 minggu
+2. waktu valid pengisian form adalah di waktu berikut
+Shift 1 = 06:45 - 15:15
+Shift 2 = 15:15 - 22:30
+Shift 3 = 22:30 - 06:45
+
+Dengan rule utama :
+Rule pengisian normal
+1. Pengisian dalam 3 shift berbeda jadi misal kondisi pengisian dilakukan dalam rentang waktu 5-11 oktober 2026 maka
+A. saat form diisi 3 shift berbeda di tanggal 5 maka pengisian dinyatakan valid
+invalid jika : shift 3 diisi tanggal 6 setelah melewati jam 06.45
+B. saat form diisi tanggal 12 shift 3 jam 06.40 itu masih valid karena masih mengikuti waktu shift 3
+invalid jika : form diisi tanggal 12 jam 06.46 (karena waktu shift sudah terlewat)
+
+
+
+
+Rule pengisian terlewat, tipe terlewat ada 2 mode, shift terlewat dan week terlewat, dengan rule
+1. saat form diisi shift 2 tanggal 5 maka shift 1 nya sebagai terlewat dan user shift 2 harus mengisi shift terlewat di shift 1 dengan opsi lupa/hari libur/ tidak dilakukan,
+Hal yang tidak boleh dilakukan sistem : saat shift 1 terlewat di tanggal 5 dan sudah diisi sebagai shift terlewat di shift 2 tanggal 5, maka di tanggal 6 shift 1 sistem tidak boleh membaca kalau shift 1 tanggal 6 belum diisi, karena pengisian sudah dilakukan ditanggal 5 shift 2 (sebagai shift 1 terlewat), begitu pun shift 2 tanggal 6 tidak dilakukan pengisian shift 2 karena sudah diisi tanggal 5,
+intinya ingat logic utama ini : "pengisian form inspeksi hanya dilakukan 3 kali di 3 shift berbeda dalam 1 hari yang sama dalam rentang waktu 1 minggu" jadi jika user udah ngisi normal di tanggal 5 dengan beberapa kondisi misal 1,2,3 normal atau shift 2, 3 (shift 1 terlewat), atau shift1,2, 3 (tidak dilakukan) maka tanggal 6 setelah jam 06.45 tidak ada opsi pengisian form inspeksi normal dan hanya dilakukan pengisian terlewat yg shift 3
+2. saat form diisi hanya shift 1, 2 tanggal 5 dan shift 3 tidak diisi karena memang tidak ada aktivitas pekerjaan di shift itu, maka shift 3 akan menjadi menggantung sebagai shift terlewat sampai di minggu depan misal tanggal 12 shift 1 user harus mengisi shift terlewat dari tanggal 5 shift 3 dan setelah itu baru bisa mengisi normal, begitupun jika hanya diisi di shift 1 saja tanggal 5 maka tanggal 12 di shift 2 dan 3 sebagai shift terlewat
+3. dalam rentang waktu tanggal 5-11 jika dalam rentang tersebut tidak dilakukan pengisian. maka akan terjadi beberapa kondisi berikut :
+A. saat user mengisi di tanggal setelah tanggal 11 (misal di rentang 12-18) maka pengisian tanggal tersebut masuk ke week terlewat dan user bisa memilih untuk mau input di tanggal berapa di rentang tanggal 5-11, misal setelah user memilih ditanggal 7 maka saat disubmit week terlewat (1 x) akan ter generate form inspeksi di 3 shift berbeda di tanggal 7 dan baru user bisa mengisi normal
+
+7/10/2026 06:45:00
+Shift 1
+Compounding Liquid 1	
+Personel:
+- (Lupa)
+Ruangan:
+- (Lupa)
+Peralatan:
+- (Lupa)
+13/10/2026 02:15:06 by System Administrator	Approved / Final	
+Staff: System Administrator
+SPV: yudha
+Edit
+
+07/10/2026 15:15:00
+Shift 2
+Compounding Liquid 1	
+Personel:
+- (Lupa)
+Ruangan:
+- (Lupa)
+Peralatan:
+- (Lupa)
+13/10/2026 02:14:59 by System Administrator	Approved / Final	
+Staff: System Administrator
+SPV: yudha
+Edit
+
+7/10/2026 22:30:00
+Shift 3
+Compounding Liquid 1	
+Personel:
+- (Lupa)
+Ruangan:
+- (Lupa)
+Peralatan:
+- (Lupa)
+13/10/2026 02:14:59 by System Administrator	Approved / Final	
+Staff: System Administrator
+SPV: yudha
+Edit
+
+
+
