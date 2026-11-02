@@ -1,0 +1,74 @@
+lakukan perubahan tanpa ubah logic lain
+
+
+1, di halaman /report_inspeksi saat edit button di klik kan masuk ke
+/edit?id=id
+
+nah ada bug
+a. saat klik Minta Otorisasi Revisi (Re-login) itu di password belum ada mata ikan, samain kaya login
+b. saat sudah berhasil login ternyata kolom ""LOKASI AREA dan SHIFT "" itu gak disable, buat agar disable karena awal saat klik button edit kan udah spesifik di mesin mana yg mau di edit
+2. ini fitur penting dan agak tricky
+kendala : data form shift terlewat/mingguan terlewat ternyata tidak bisa diubah walaupun status edited 1x, jadi kaya stuck 
+
+Personel:
+- (Tidak dilakukan)
+Ruangan:
+- (Tidak dilakukan)
+Peralatan:
+- (Tidak dilakukan)
+03/11/2026 01:07:31 by admin (edited 1x)
+
+(padahal status personel gw ganti ke nok dan gw kasih keterangan)
+
+intinya gini gw mau ada perubahan 
+a. dihalaman /report_inspeksi dan /validasi_inspeksi tambah status card itu sebagai card shift terlewat/mingguan terlewat
+di row ""Tanggal / Shift ""
+jadinya
+""
+02/11/2026 15:15:00
+Shift 2
+Shift Terlewat (atau week terlewat dengan status card warna agak kemerahan)
+b. masih di /report_inspeksi khusus untuk status shift terlewat/week terlewat tadi saat di klik button edit kan masuk ke halaman /edit?id=id , nah gw gak tau ini possible apa enggak tapi buat agar muncul halaman shift terlewat/week terlewat untuk button edit itu bukan ""Edit Form Inspeksi Kebersihan
+Perbarui rekaman inspeksi (Status akan kembali menjadi Menunggu Supervisor).
+
+TANGGAL INSPEKSI
+2026-11-02
+STATUS DOKUMEN SAAT INI
+Menunggu Supervisor
+LOKASI AREA *
+
+Compounding Solid 2
+SHIFT *
+
+Shift 2
+PEMERIKSAAN KEBERSIHAN
+1. Kebersihan Personel *
+
+✓ OK
+
+✕ NOK (Not OK)
+2. Kebersihan Ruangan *
+
+✓ OK
+
+✕ NOK (Not OK)
+3. Kebersihan Peralatan *
+
+✓ OK
+
+✕ NOK (Not OK)""
+
+tapi sesuaikan agar yg di edit itu keterangan nya aja
+i) kalau shift terlewat berarti bisa ubah pilihan keterangan apa
+ii) kalau week terlewat berarti bebas pilih tanggal nya dan keterangan juga, kan ada logic kalau week terlewat di submit itu otomatis ter generate 3 input di shift berbeda, nah ini juga logicnya sama kalau 1 shift aja yg di edit entah 1,2,3 (misal ge wdit shift 3) maka saat di submit itu auto edit juga ke3 shift nya 1,2,3 dengan status edited berapa x dan jam edit nya sama semua, paham kan?
+
+c. karena penambahan status terlewat tadi makanya di halaman /report_inspeksi, tambah filter input terlewat dengan filter
+""semua terlewat, shift terlewat, week terlewat"" jadiurutan filternya
+"" lokasi, input terlewat, urutan data"
+
+oke, paling itu perubahan nya, karena ada update logic terutama di nomer 2 gw gak tau perlu ada code file baru apa enggak, cuman better kalau b isa si pakai page yg sekarang aja, takutnya ngebug, kalaupun lu mau nambah page file baru pastiin tidak ada bug, tampilan ui css sidebar harus sama, tanpa mengubah logic lain yang tidak berhubungan
+
+
+-------------------------------------------------
+kerjakan
+
