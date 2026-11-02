@@ -1,0 +1,75 @@
+lakukan perubahan tanpa ubah logic lain
+1. di halaman login, ada 2 fungsi mata ican buat show password, hapus yang kiri dan pakai yg paling ujung kanan
+2. dihalaman /selectlokasi kan ada info misal
+""Shift 3 tanggal ini sudah memiliki record. Tidak ada pengisian kedua untuk shift yang sama."" tambah informasi kapan data wal disubmit, jadi output semua mesin/area
+""Data awal disubmit pada shift 3 tanggal 02/11/2026
+Shift 3 tanggal ini sudah memiliki record. Tidak ada pengisian kedua untuk shift yang sama.""
+pesan data awal itu harus di lock di shift yg di submit, maksudku yg contoh kan shift 3, kalau di submit di shift 2 ya jadi shift 2 tapi bagian info misal data udah memiliki record tetep ngikutin waktu kapan user mau submit/inspeksi form nya, paham kan?
+3. bagian /report_inspeksi, submit date kan hanya data user submitnya
+02/11/2026 23:18:28 by nanda yusuf ramadhani	
+tapi tambah juga data kapan supv approved, jadinya
+""
+02/11/2026 23:18:28 by nanda yusuf ramadhani
+02/11/2026 23:45:00 approved by Yudha
+""
+
+penambahan informasi approved by ini tanpa mempengaruhi hasil report pdf nya ya, ini hanya info tambahan
+4. di halaman /validasi_inspeksi
+kan ada filter (sesuai urutan dari kiri ke kanan)
+a. Status Validasi
+
+Menunggu Approval Supervisor (SUBMITTED)
+
+b. Lokasi
+
+
+c. Tanggal
+
+mm/dd/yyyy
+
+d. Urutan Data
+
+
+
+
+nah tambah filter bulan dan tahun supaya (dari kiri ke kanan)
+
+a. Status Validasi
+
+Menunggu Approval Supervisor (SUBMITTED)
+
+b. Lokasi
+
+
+c. Tanggal
+
+mm/dd/yyyy
+
+
+d. BULAN
+
+e. TAHUN
+
+f. Urutan Data
+
+5. dihalaman /report_inspeksi
+juga tambah filter tanggal, jadi urutannya (dari kiri ke kanan (kalo filter tanggal di pakai spesifik ya hasil pdf ikut ke tanggal spesifik nya juga))
+
+a. Tanggal
+
+b. BULAN
+
+November
+c. TAHUN
+
+2026
+d. LOKASI
+
+-- Semua Lokasi --
+e. URUTAN DATA
+
+Data Terbaru
+
+-------------------------------------------------
+kerjakan
+
